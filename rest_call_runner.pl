@@ -583,12 +583,13 @@ sub do_curl {
     my $headers_str = join(" ", @extra_headers_args);
     my $curl_cmd = qq{curl $silent_arg $method_arg $auth_arg $headers_str "$url" $data_arg -w "%{http_code}"};
 
-    # Log the derived curl command line (not expanding environment placeholders)
-    {
-        open my $GL, '>>', $global_curl_log or die "Cannot append to '$global_curl_log': $!\n";
-        print $GL $curl_cmd, "\n\n";
-        close $GL;
-    }
+# Log the derived curl command line with a comment line
+{
+    open my $GL, '>>', $global_curl_log or die "Cannot append to '$global_curl_log': $!\n";
+    print $GL "#$call_id\n", $curl_cmd, "\n\n";
+    close $GL;
+}
+
 
     # If dry-run, skip actual call and pretend success
     if ($dry_run) {
