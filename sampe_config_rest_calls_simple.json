@@ -1,0 +1,29 @@
+{
+  "token_fetch_url": "http://service:80/api/auth/get-token?secret=${SECRET}",
+  "token_extraction_command": "jq -r .value",
+  "variables": {
+    "CALL_VAR_CLIENT_ID": "1234-567",
+    "CALL_VAR_ACCOUNT_NUMBER": "333-001"
+  },
+  "base_url": "http://service:80/api",
+  "calls": [
+    {
+      "identifier": "CALL01_getClient",
+      "rest_method": "GET",
+      "url": "/client/CALL_VAR_CLIENT_ID",
+      "headers": [],
+      "comment": "Fetch the user's profile",
+      "param_extractions": [],
+      "obfuscation_rules": []
+    },
+    {
+      "identifier": "CALL02_getAccount",
+      "rest_method": "GET",
+      "url": "/client/CALL_VAR_CLIENT_ID/CALL_VAR_ACCOUNT_NUMBER",
+      "headers": [],
+      "comment": "Fetch the user's account data of the first account ",
+      "param_extractions": [],
+      "obfuscation_rules": []
+    }
+  ]
+}

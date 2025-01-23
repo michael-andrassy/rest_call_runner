@@ -1,0 +1,105 @@
+{
+  "token_fetch_url": "http://service:80/api/auth/get-token?secret=${SECRET}",
+  "token_extraction_command": "jq -r .value",
+  "variables": {
+    "CALL_VAR_CLIENT_ID": "1234-567",
+    "CALL_VAR_MOCK_CLIENT_ID": "M000-001",
+    "CALL_VAR_MOCK_CLIENT_FNAME": "Marry",
+    "CALL_VAR_MOCK_CLIENT_LNAME": "Sue",
+    "CALL_VAR_MOCK_ACCOUNT_NUMBER": "111-100"
+  },
+  "base_url": "http://service:80/api",
+  "calls": [
+    {
+      "identifier": "CALL01_getClient",
+      "rest_method": "GET",
+      "url": "/client/CALL_VAR_CLIENT_ID",
+      "headers": [],
+      "comment": "Fetch the user's profile and extract the first accounts account number into a replacement-variable, then obfuscate the data",
+      "param_extractions": [
+        {
+          "var_name": "CALL_VAR_ACCOUNT_NUMBER",
+          "cmd": "jq -r '.accounts[0]'",
+          "comment": "Get the first value from the array that is the vakue of the attribute accounts and store it into a replacement-variable"
+        },
+        {
+          "var_name": "CALL_VAR_NAME_KEY",
+          "cmd": "jq -r '[.firstname, .lastname] | join(\"_\")' | sed 's/.*/\\U&/'",
+          "comment": "extract firstname and lastname attributes then concatenate them via '_' then convert to upper case"
+        }
+
+      ],
+      "obfuscation_rules": [ 
+        { "cmd": "sed 's/CALL_VAR_CLIENT_ID/CALL_VAR_MOCK_CLIENT_ID/g'"},
+        { "cmd": "jq -c '.accounts[0] = \"CALL_VAR_MOCK_ACCOUNT_NUMBER\"'" }, 
+        { "cmd": "jq -c '.accounts[1] = \"XXX-XXX\"'" }, 
+        { "cmd": "jq -c '.firstname = \"CALL_VAR_MOCK_CLIENT_FNAME\"'" }, 
+        { "cmd": "jq -c '.lastname = \"CALL_VAR_MOCK_CLIENT_LNAME\"'" }
+      ]
+    },
+    {
+      "identifier": "CALL02_getAccount",
+      "rest_method": "GET",
+      "url": "/client/CALL_VAR_CLIENT_ID/CALL_VAR_ACCOUNT_NUMBER",
+      "headers": [],
+      "comment": "Fetch the user's account data of the first account returned in the earlier call, extract the balance, afterwards obfuscate the response",
+      "param_extractions": [ 
+        {
+          "var_name": "CALL_VAR_REAL_ACCOUNT_BALANCE",
+          "cmd": "jq -r '.balance'",
+          "comment": "Get the value of the account balance attribute"
+        },
+        {
+          "var_name": "CALL_VAR_MANIPULATED_ACCOUNT_BALANCE",
+          "cmd": "jq -r '.balance + 50'",
+          "comment": "Get the value of the account balance attribute and add 50 bucks"
+        }
+      ],
+      "obfuscation_rules": [
+        { "cmd": "jq -c '.client_id = \"CALL_VAR_MOCK_CLIENT_ID\"'" },
+        { "cmd": "jq -c '.account = \"CALL_VAR_MOCK_ACCOUNT_NUMBER\"'" }
+      ]
+    },
+    {
+      "identifier": "CALL03_produce_updAccountJson_PRIVATE",
+      "rest_method": "GET",
+      "url": "/client/CALL_VAR_CLIENT_ID/CALL_VAR_ACCOUNT_NUMBER",
+      "headers": [],
+      "comment": "Fetch the user's account data of the first account returned in the earlier call, manipulate the account balance, don't obfuscate - hence PRIVATE",
+      "param_extractions": [],
+      "obfuscation_rules": [
+        { "cmd": "jq '.balance += 50'" }
+      ]
+    },
+    {
+      "identifier": "CALL04_update_Account_balance_PRIVATE",
+      "rest_method": "PUT",
+      "url": "/client/CALL_VAR_CLIENT_ID/CALL_VAR_ACCOUNT_NUMBER",
+      "headers": ["Content-Type: application/json"],
+      "comment": "Use the manupulated response (p_ file) FROM THE CURRENT WORKDIR of an earlier get-call to update the account via PUT, input is not obfuscated - hence PRIVATE",
+      "body_file": "W:p_CALL03_produce_updAccountJson_PRIVATE_response.json",
+      "param_extractions": [],
+      "obfuscation_rules": []
+    },
+    {
+      "identifier": "CALL05_update_Account_balance_PRIVATE_V2",
+      "rest_method": "PUT",
+      "url": "/client/CALL_VAR_CLIENT_ID/CALL_VAR_ACCOUNT_NUMBER",
+      "headers": ["Content-Type: application/json"],
+      "comment": "Use an earlier provided json file FROM THE CURRENT DIR to update the account via PUT, no obfuscation - hence PRIVATE",
+      "body_file": "data_updated_account.json",
+      "param_extractions": [],
+      "obfuscation_rules": []
+    },
+    {
+      "identifier": "CALL06_updateClient",
+      "rest_method": "POST",
+      "url": "/client/CALL_VAR_CLIENT_ID",
+      "headers": ["Content-Type: application/json"],
+      "body_file": "data.json",
+      "comment": "Send a post call to a specific user's endpoint, simulating some update. This time we need an extra header.",
+      "param_extractions": [],
+      "obfuscation_rules": [ { "cmd": "cat" } ]
+    }
+  ]
+}

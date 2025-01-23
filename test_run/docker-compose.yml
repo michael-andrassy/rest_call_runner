@@ -1,0 +1,32 @@
+services:
+  service:
+    image: tiangolo/uwsgi-nginx-flask:python3.9
+    environment:
+      - MODULE_NAME=app       # Tells the image to use app.py (instead of main.py)
+      - VARIABLE_NAME=app      # Tells the image that the Flask app instance is named "app"
+    volumes:
+      - .:/app
+    working_dir: /app
+#    networks:
+#      - internal_net
+
+  runner:
+    image: perl:latest
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      - SECRET=REALLY_REALLY_SECRET       # Tells the image to use app.py (instead of main.py)
+    volumes:
+      - .:/tmp/work
+      - ../rest_call_runner.pl:/tmp/work/rest_call_runner.pl:ro 
+    working_dir: /tmp/work
+    command: sh -c "apt-get update && apt-get -y install jq && sleep 3 && perl rest_call_runner.pl rest_call_sequence_01.json __timestamp"
+    depends_on:
+      - service
+#    networks:
+#      - internal_net
+
+#networks:
+#  internal_net:
+#    internal: false
