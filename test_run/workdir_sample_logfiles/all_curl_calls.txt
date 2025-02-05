@@ -1,14 +1,21 @@
+#token_fetch
 curl -sS -X GET   "http://service:80/api/auth/get-token?secret=${SECRET}"  -w "%{http_code}"
 
+#CALL01_getClient
 curl -sS -X GET -H "Authorization: Bearer $MY_BEARER_TOKEN"  "http://service:80/api/client/1234-567"  -w "%{http_code}"
 
+#CALL02_getAccount
 curl -sS -X GET -H "Authorization: Bearer $MY_BEARER_TOKEN"  "http://service:80/api/client/1234-567/333-001"  -w "%{http_code}"
 
+#CALL03_produce_updAccountJson_PRIVATE
 curl -sS -X GET -H "Authorization: Bearer $MY_BEARER_TOKEN"  "http://service:80/api/client/1234-567/333-001"  -w "%{http_code}"
 
-curl -sS -X PUT -H "Authorization: Bearer $MY_BEARER_TOKEN" -H "Content-Type: application/json" "http://service:80/api/client/1234-567/333-001" --data-binary @work_20250123T004929/x_CALL04_update_Account_balance_PRIVATE_request.json -w "%{http_code}"
+#CALL04_update_Account_balance_PRIVATE
+curl -sS -X PUT -H "Authorization: Bearer $MY_BEARER_TOKEN" -H "Content-Type: application/json" "http://service:80/api/client/1234-567/333-001" --data-binary @work_20250205T103917/x_CALL04_update_Account_balance_PRIVATE_request.json -w "%{http_code}"
 
-curl -sS -X PUT -H "Authorization: Bearer $MY_BEARER_TOKEN" -H "Content-Type: application/json" "http://service:80/api/client/1234-567/333-001" --data-binary @work_20250123T004929/x_CALL05_update_Account_balance_PRIVATE_V2_request.json -w "%{http_code}"
+#CALL05_update_Account_balance_PRIVATE_V2
+curl -sS -X PUT -H "Authorization: Bearer $MY_BEARER_TOKEN" -H "Content-Type: application/json" "http://service:80/api/client/1234-567/333-001" --data-binary @work_20250205T103917/x_CALL05_update_Account_balance_PRIVATE_V2_request.json -w "%{http_code}"
 
-curl -sS -X POST -H "Authorization: Bearer $MY_BEARER_TOKEN" -H "Content-Type: application/json" "http://service:80/api/client/1234-567" --data-binary @work_20250123T004929/x_CALL06_updateClient_request.json -w "%{http_code}"
+#CALL06_updateClient
+curl -sS -X POST -H "Authorization: Bearer $MY_BEARER_TOKEN" -H "Content-Type: application/json" "http://service:80/api/client/1234-567" --data-binary @work_20250205T103917/x_CALL06_updateClient_request.json -w "%{http_code}"
 

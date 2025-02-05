@@ -21,7 +21,7 @@ services:
       - .:/tmp/work
       - ../rest_call_runner.pl:/tmp/work/rest_call_runner.pl:ro 
     working_dir: /tmp/work
-    command: sh -c "apt-get update && apt-get -y install jq && sleep 3 && perl rest_call_runner.pl rest_call_sequence_01.json __timestamp"
+    command: sh -c "apt-get update && apt-get -y install jq && sleep 3 && perl rest_call_runner.pl --call-delay=250 rest_call_sequence_01.json __timestamp"
     depends_on:
       - service
 #    networks:

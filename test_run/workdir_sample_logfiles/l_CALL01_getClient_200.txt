@@ -5,6 +5,9 @@ CALL_VAR_MOCK_CLIENT_FNAME = Marry
 CALL_VAR_MOCK_CLIENT_ID = M000-001
 CALL_VAR_MOCK_CLIENT_LNAME = Sue
 
+--- Request Method ---
+GET
+
 --- Request Body ---
 
 

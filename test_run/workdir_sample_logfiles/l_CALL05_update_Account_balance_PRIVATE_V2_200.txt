@@ -9,6 +9,9 @@ CALL_VAR_MOCK_CLIENT_LNAME = Sue
 CALL_VAR_NAME_KEY = JOHN_DOE
 CALL_VAR_REAL_ACCOUNT_BALANCE = 1000
 
+--- Request Method ---
+PUT
+
 --- Request Body ---
 {"account":"999-001","balance":0,"client_id":"9999-567"}
 

@@ -9,6 +9,9 @@ CALL_VAR_MOCK_CLIENT_LNAME = Sue
 CALL_VAR_NAME_KEY = JOHN_DOE
 CALL_VAR_REAL_ACCOUNT_BALANCE = 1000
 
+--- Request Method ---
+GET
+
 --- Request Body ---
 
 

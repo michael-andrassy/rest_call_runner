@@ -7,6 +7,9 @@ CALL_VAR_MOCK_CLIENT_ID = M000-001
 CALL_VAR_MOCK_CLIENT_LNAME = Sue
 CALL_VAR_NAME_KEY = JOHN_DOE
 
+--- Request Method ---
+GET
+
 --- Request Body ---
 
 

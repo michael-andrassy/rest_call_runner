@@ -1,33 +1,66 @@
 Attaching to runner-1, service-1
 service-1  | Checking for script in /app/prestart.sh
 service-1  | There is no script /app/prestart.sh
-service-1  | 2025-01-23 01:09:16,200 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
-service-1  | 2025-01-23 01:09:16,200 INFO Included extra file "/etc/supervisor/conf.d/supervisord.conf" during parsing
-service-1  | 2025-01-23 01:09:16,202 INFO RPC interface 'supervisor' initialized
-service-1  | 2025-01-23 01:09:16,202 CRIT Server 'unix_http_server' running without any HTTP authentication checking
-service-1  | 2025-01-23 01:09:16,202 INFO supervisord started with pid 1
-runner-1   | Hit:1 http://deb.debian.org/debian bookworm InRelease
-runner-1   | Hit:2 http://deb.debian.org/debian bookworm-updates InRelease
-runner-1   | Hit:3 http://deb.debian.org/debian-security bookworm-security InRelease
+service-1  | 2025-02-05 10:40:02,036 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+service-1  | 2025-02-05 10:40:02,036 INFO Included extra file "/etc/supervisor/conf.d/supervisord.conf" during parsing
+service-1  | 2025-02-05 10:40:02,038 INFO RPC interface 'supervisor' initialized
+service-1  | 2025-02-05 10:40:02,038 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+service-1  | 2025-02-05 10:40:02,038 INFO supervisord started with pid 1
+runner-1   | Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+runner-1   | Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+runner-1   | Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+runner-1   | Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8792 kB]
+runner-1   | Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [13.5 kB]
+runner-1   | Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [243 kB]
+service-1  | 2025-02-05 10:40:03,040 INFO spawned: 'quit_on_failure' with pid 8
+service-1  | 2025-02-05 10:40:03,041 INFO spawned: 'nginx' with pid 9
+service-1  | 2025-02-05 10:40:03,041 INFO spawned: 'uwsgi' with pid 10
+service-1  | 2025-02-05 10:40:03,043 INFO success: nginx entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+service-1  | 2025-02-05 10:40:03,043 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+runner-1   | Fetched 9303 kB in 1s (8777 kB/s)
 runner-1   | Reading package lists...
 runner-1   | Reading package lists...
-service-1  | 2025-01-23 01:09:17,205 INFO spawned: 'quit_on_failure' with pid 8
-service-1  | 2025-01-23 01:09:17,206 INFO spawned: 'nginx' with pid 9
-service-1  | 2025-01-23 01:09:17,207 INFO spawned: 'uwsgi' with pid 10
-service-1  | 2025-01-23 01:09:17,208 INFO success: nginx entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-service-1  | 2025-01-23 01:09:17,208 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
 runner-1   | Building dependency tree...
 runner-1   | Reading state information...
-runner-1   | jq is already the newest version (1.6-2.1).
-runner-1   | 0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
-service-1  | 2025-01-23 01:09:18,656 INFO success: quit_on_failure entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+runner-1   | The following additional packages will be installed:
+runner-1   |   libjq1 libonig5
+runner-1   | The following NEW packages will be installed:
+runner-1   |   jq libjq1 libonig5
+runner-1   | 0 upgraded, 3 newly installed, 0 to remove and 5 not upgraded.
+runner-1   | Need to get 388 kB of archives.
+runner-1   | After this operation, 1165 kB of additional disk space will be used.
+runner-1   | Get:1 http://deb.debian.org/debian bookworm/main amd64 libonig5 amd64 6.9.8-1 [188 kB]
+runner-1   | Get:2 http://deb.debian.org/debian bookworm/main amd64 libjq1 amd64 1.6-2.1 [135 kB]
+runner-1   | Get:3 http://deb.debian.org/debian bookworm/main amd64 jq amd64 1.6-2.1 [64.9 kB]
+runner-1   | Fetched 388 kB in 0s (3654 kB/s)
+runner-1   | Selecting previously unselected package libonig5:amd64.
+runner-1   | (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 23254 files and directories currently installed.)
+runner-1   | Preparing to unpack .../libonig5_6.9.8-1_amd64.deb ...
+runner-1   | Unpacking libonig5:amd64 (6.9.8-1) ...
+runner-1   | Selecting previously unselected package libjq1:amd64.
+runner-1   | Preparing to unpack .../libjq1_1.6-2.1_amd64.deb ...
+runner-1   | Unpacking libjq1:amd64 (1.6-2.1) ...
+runner-1   | Selecting previously unselected package jq.
+runner-1   | Preparing to unpack .../archives/jq_1.6-2.1_amd64.deb ...
+runner-1   | Unpacking jq (1.6-2.1) ...
+runner-1   | Setting up libonig5:amd64 (6.9.8-1) ...
+runner-1   | Setting up libjq1:amd64 (1.6-2.1) ...
+runner-1   | Setting up jq (1.6-2.1) ...
+runner-1   | Processing triggers for libc-bin (2.36-9+deb12u9) ...
+service-1  | 2025-02-05 10:40:04,497 INFO success: quit_on_failure entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
 runner-1   | Fetching bearer token...
 runner-1   | Dry-run active. Returning 'DRYRUN_BEARER_TOKEN'...
+runner-1   | Delaying rest call by 250 millis
 runner-1   | Call 'CALL01_getClient' completed with status 999.
+runner-1   | Delaying rest call by 250 millis
 runner-1   | Call 'CALL02_getAccount' completed with status 999.
+runner-1   | Delaying rest call by 250 millis
 runner-1   | Call 'CALL03_produce_updAccountJson_PRIVATE' completed with status 999.
+runner-1   | Delaying rest call by 250 millis
 runner-1   | Call 'CALL04_update_Account_balance_PRIVATE' completed with status 999.
+runner-1   | Delaying rest call by 250 millis
 runner-1   | Call 'CALL05_update_Account_balance_PRIVATE_V2' completed with status 999.
+runner-1   | Delaying rest call by 250 millis
 runner-1   | Call 'CALL06_updateClient' completed with status 999.
 runner-1   | 
 runner-1   | Script completed.

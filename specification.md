@@ -23,6 +23,7 @@ We need a tool that automates a sequence of REST calls. It must fetch a bearer t
    - **Optional**:  
      1. `--dry-run` (default: off).  
      2. `--continue-on-error=(yes|no)` (default: yes).  
+     3. `--call-delay=X` (default: X = 100; 0..60000).  
 
 4. **Configuration File Format**  
    - **Token Fetch** (optional):  
@@ -104,12 +105,13 @@ export ENV_API_VERSION="prod"
 export ENV_SPECIAL_HEADER="some-secret"
 
 # Then run the script:
-perl rest_sequence_script.pl --dry-run config_example.json __timestamp
+perl rest_sequence_script.pl --dry-run --call-delay=120 config_example.json __timestamp
 
 ``` </code></pre>
 
    - `--dry-run` to simulate.  
    - `--continue-on-error=no` to stop on first failure.  
+   - `--call-delay=120` inserts a sleep of 120 millis before each rest call.     
    - The two mandatory arguments: `config-file` and `workdir` (or `__timestamp`).  
 
 ## 4. Example Configuration

@@ -7,6 +7,7 @@ use File::Spec;
 use IPC::Open3;
 use Symbol 'gensym';
 use POSIX qw(strftime);
+use Time::HiRes qw(usleep);
 
 ################################################################################
 # print_usage
@@ -28,6 +29,8 @@ Optional switches:
                            simulate them instead, returning HTTP status 999.
   --continue-on-error=yes  (default) continue executing calls even if one fails.
   --continue-on-error=no   stop execution if a call fails (non-2xx/999).
+  --call-delay=X           (default) delay each call by X milliseconds (0..60000), 
+                           default=100.
 
 If mandatory parameters are missing, this usage will be shown.
 USAGE
@@ -39,8 +42,9 @@ USAGE
 #   executes configured REST calls in order.
 ################################################################################
 sub main {
-    my $dry_run          = 0;   # Default: false
-    my $continue_on_error = 1;  # Default: yes (true)
+    my $dry_run           = 0;   # Default: false
+    my $continue_on_error = 1;   # Default: yes (true)
+    my $delay_call_ms     = 100; # Default: 100 milliseconds 
     my $config_file;
     my $workdir;
 
@@ -56,6 +60,15 @@ sub main {
                 $continue_on_error = 0;
             } else {
                 $continue_on_error = 1; # default
+            }
+        } elsif ($arg =~ /^--call-delay=(.*)$/) {
+            my $val = lc($1);
+            if ($val =~ /^\d+$/ && $val >= 0 && $val <= 60000) {
+                $delay_call_ms = int($val);
+            }
+            else {
+                print STDERR "Invalid parameter value for --call-delay. Must be an integer between 0 and 60000.\n";
+                exit 1;
             }
         } else {
             # If it's not a recognized switch, it must be either config-file or workdir
@@ -139,6 +152,14 @@ sub main {
 
         if (ref $calls eq 'ARRAY') {
             CALL_LOOP: foreach my $call_conf (@$calls) {
+
+                if ($delay_call_ms > 0) {
+                    print "Delaying rest call by $delay_call_ms millis\n";
+                    usleep($delay_call_ms * 1000);  # Convert ms to microseconds
+                } else {
+                    print "No delay between rest calls\n";
+                }
+                
                 my ($ok, $http_status, $updated_vars_ref) = execute_rest_call(
                     $call_conf,
                     $base_url,
@@ -161,7 +182,7 @@ sub main {
                 } else {
                     print "Call '$call_conf->{identifier}' completed with status $http_status.\n";
                 }
-            }
+            } #foreach
         }
     }
 
@@ -241,7 +262,7 @@ sub fetch_bearer_token {
         die "Bearer token extraction yielded empty result. Aborting.\n";
     }
 
-    print "Bearer token acquired: $bearer_token\n";
+    print "Bearer token extracted: $bearer_token\n";
     return $bearer_token;
 }
 
@@ -338,6 +359,9 @@ sub execute_rest_call {
         my $content = <<INFO;
 --- Replacement Vars (Before) ---
 $before_vars_str
+
+--- Request Method ---
+$method
 
 --- Request Body ---
 $request_body

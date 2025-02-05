@@ -20,14 +20,13 @@
         {
           "var_name": "CALL_VAR_ACCOUNT_NUMBER",
           "cmd": "jq -r '.accounts[0]'",
-          "comment": "Get the first value from the array that is the vakue of the attribute accounts and store it into a replacement-variable"
+          "comment": "Get the first value from the array that is the value of the attribute accounts and store it into a replacement-variable"
         },
         {
           "var_name": "CALL_VAR_NAME_KEY",
           "cmd": "jq -r '[.firstname, .lastname] | join(\"_\")' | sed 's/.*/\\U&/'",
-          "comment": "extract firstname and lastname attributes then concatenate them via '_' then convert to upper case"
+          "comment": "Extract firstname and lastname attributes then concatenate them via '_' then convert to upper case, store the result in a replacement variable"
         }
-
       ],
       "obfuscation_rules": [ 
         { "cmd": "sed 's/CALL_VAR_CLIENT_ID/CALL_VAR_MOCK_CLIENT_ID/g'"},
