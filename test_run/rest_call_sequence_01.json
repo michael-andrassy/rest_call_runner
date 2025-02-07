@@ -1,4 +1,12 @@
 {
+  "token_fetch_method": "POST",
+  "token_fetch_follow_redirects": true,
+  "token_fetch_headers": ["Content-Type: application/x-www-form-urlencoded"],
+  "token_fetch_form_data": [
+    { "name": "grant_type", "value": "password" },
+    { "name": "client_id",  "value": "MY_CLIENT_ID" },
+    { "name": "password",   "value": "${SECRET}" }
+  ],  
   "token_fetch_url": "http://service:80/api/auth/get-token?secret=${SECRET}",
   "token_extraction_command": "jq -r .value",
   "variables": {

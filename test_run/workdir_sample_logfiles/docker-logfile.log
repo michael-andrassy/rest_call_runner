@@ -1,48 +1,49 @@
 Attaching to runner-1, service-1
 service-1  | Checking for script in /app/prestart.sh
 service-1  | There is no script /app/prestart.sh
-service-1  | 2025-02-05 10:39:13,919 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
-service-1  | 2025-02-05 10:39:13,919 INFO Included extra file "/etc/supervisor/conf.d/supervisord.conf" during parsing
-service-1  | 2025-02-05 10:39:13,923 INFO RPC interface 'supervisor' initialized
-service-1  | 2025-02-05 10:39:13,923 CRIT Server 'unix_http_server' running without any HTTP authentication checking
-service-1  | 2025-02-05 10:39:13,923 INFO supervisord started with pid 1
+service-1  | 2025-02-07 10:17:53,852 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+service-1  | 2025-02-07 10:17:53,852 INFO Included extra file "/etc/supervisor/conf.d/supervisord.conf" during parsing
+service-1  | 2025-02-07 10:17:53,854 INFO RPC interface 'supervisor' initialized
+service-1  | 2025-02-07 10:17:53,854 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+service-1  | 2025-02-07 10:17:53,854 INFO supervisord started with pid 1
 runner-1   | Hit:1 http://deb.debian.org/debian bookworm InRelease
 runner-1   | Hit:2 http://deb.debian.org/debian bookworm-updates InRelease
-runner-1   | Hit:3 http://deb.debian.org/debian-security bookworm-security InRelease
+runner-1   | Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+runner-1   | Fetched 48.0 kB in 0s (349 kB/s)
 runner-1   | Reading package lists...
 runner-1   | Reading package lists...
 runner-1   | Building dependency tree...
 runner-1   | Reading state information...
 runner-1   | jq is already the newest version (1.6-2.1).
 runner-1   | 0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
-service-1  | 2025-02-05 10:39:14,927 INFO spawned: 'quit_on_failure' with pid 8
-service-1  | 2025-02-05 10:39:14,928 INFO spawned: 'nginx' with pid 9
-service-1  | 2025-02-05 10:39:14,929 INFO spawned: 'uwsgi' with pid 10
-service-1  | 2025-02-05 10:39:14,931 INFO success: nginx entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-service-1  | 2025-02-05 10:39:14,931 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-service-1  | 2025-02-05 10:39:16,475 INFO success: quit_on_failure entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+service-1  | 2025-02-07 10:17:54,857 INFO spawned: 'quit_on_failure' with pid 8
+service-1  | 2025-02-07 10:17:54,858 INFO spawned: 'nginx' with pid 9
+service-1  | 2025-02-07 10:17:54,859 INFO spawned: 'uwsgi' with pid 10
+service-1  | 2025-02-07 10:17:54,861 INFO success: nginx entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+service-1  | 2025-02-07 10:17:54,861 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+service-1  | 2025-02-07 10:17:56,284 INFO success: quit_on_failure entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
 runner-1   | Fetching bearer token...
-service-1  | 172.21.0.3 - - [05/Feb/2025:10:39:17 +0000] "GET /api/auth/get-token?secret=REALLY_REALLY_SECRET HTTP/1.1" 200 208 "-" "curl/7.88.1" "-"
+service-1  | 172.21.0.3 - - [07/Feb/2025:10:17:57 +0000] "POST /api/auth/get-token?secret=REALLY_REALLY_SECRET HTTP/1.1" 200 208 "-" "curl/7.88.1" "-"
 runner-1   | Raw bearer token acquired: {"domain":"example.com","name":"session","path":"/","value":"eyJhb_THIS_IS_A_MOCKED_JWT_TOKEN_CJ9.eyJ1c2VySWQiOiIxMjMiLCJuYW1lIjoiam9obiIsImlhdCI6MTUxNjIzOTAyMn0.GVS21Zrwf-8epIL7jUgnBBd5BxFxr0toB2BYQIxh6IU"}
 runner-1   | 
 runner-1   | Bearer token extracted: eyJhb_THIS_IS_A_MOCKED_JWT_TOKEN_CJ9.eyJ1c2VySWQiOiIxMjMiLCJuYW1lIjoiam9obiIsImlhdCI6MTUxNjIzOTAyMn0.GVS21Zrwf-8epIL7jUgnBBd5BxFxr0toB2BYQIxh6IU
 runner-1   | Delaying rest call by 250 millis
-service-1  | 172.21.0.3 - - [05/Feb/2025:10:39:18 +0000] "GET /api/client/1234-567 HTTP/1.1" 200 94 "-" "curl/7.88.1" "-"
+service-1  | 172.21.0.3 - - [07/Feb/2025:10:17:58 +0000] "GET /api/client/1234-567 HTTP/1.1" 200 94 "-" "curl/7.88.1" "-"
 runner-1   | Call 'CALL01_getClient' completed with status 200.
 runner-1   | Delaying rest call by 250 millis
-service-1  | 172.21.0.3 - - [05/Feb/2025:10:39:18 +0000] "GET /api/client/1234-567/333-001 HTTP/1.1" 200 60 "-" "curl/7.88.1" "-"
+service-1  | 172.21.0.3 - - [07/Feb/2025:10:17:58 +0000] "GET /api/client/1234-567/333-001 HTTP/1.1" 200 60 "-" "curl/7.88.1" "-"
 runner-1   | Call 'CALL02_getAccount' completed with status 200.
 runner-1   | Delaying rest call by 250 millis
-service-1  | 172.21.0.3 - - [05/Feb/2025:10:39:18 +0000] "GET /api/client/1234-567/333-001 HTTP/1.1" 200 60 "-" "curl/7.88.1" "-"
+service-1  | 172.21.0.3 - - [07/Feb/2025:10:17:58 +0000] "GET /api/client/1234-567/333-001 HTTP/1.1" 200 60 "-" "curl/7.88.1" "-"
 runner-1   | Call 'CALL03_produce_updAccountJson_PRIVATE' completed with status 200.
 runner-1   | Delaying rest call by 250 millis
-service-1  | 172.21.0.3 - - [05/Feb/2025:10:39:19 +0000] "PUT /api/client/1234-567/333-001 HTTP/1.1" 200 69 "-" "curl/7.88.1" "-"
+service-1  | 172.21.0.3 - - [07/Feb/2025:10:17:59 +0000] "PUT /api/client/1234-567/333-001 HTTP/1.1" 200 69 "-" "curl/7.88.1" "-"
 runner-1   | Call 'CALL04_update_Account_balance_PRIVATE' completed with status 200.
 runner-1   | Delaying rest call by 250 millis
-service-1  | 172.21.0.3 - - [05/Feb/2025:10:39:19 +0000] "PUT /api/client/1234-567/333-001 HTTP/1.1" 200 66 "-" "curl/7.88.1" "-"
+service-1  | 172.21.0.3 - - [07/Feb/2025:10:17:59 +0000] "PUT /api/client/1234-567/333-001 HTTP/1.1" 200 66 "-" "curl/7.88.1" "-"
 runner-1   | Call 'CALL05_update_Account_balance_PRIVATE_V2' completed with status 200.
 runner-1   | Delaying rest call by 250 millis
-service-1  | 172.21.0.3 - - [05/Feb/2025:10:39:19 +0000] "POST /api/client/1234-567 HTTP/1.1" 200 57 "-" "curl/7.88.1" "-"
+service-1  | 172.21.0.3 - - [07/Feb/2025:10:17:59 +0000] "POST /api/client/1234-567 HTTP/1.1" 200 57 "-" "curl/7.88.1" "-"
 runner-1   | Call 'CALL06_updateClient' completed with status 200.
 runner-1   | 
 runner-1   | Script completed.

@@ -8,6 +8,7 @@ use IPC::Open3;
 use Symbol 'gensym';
 use POSIX qw(strftime);
 use Time::HiRes qw(usleep);
+use Data::Dumper;
 
 ################################################################################
 # print_usage
@@ -136,8 +137,7 @@ sub main {
     my $bearer_token = '';
     if (exists $config->{token_fetch_url} && $config->{token_fetch_url}) {
         $bearer_token = fetch_bearer_token(
-            $config->{token_fetch_url},
-            $config->{token_extraction_command},
+            $config,
             $workdir,
             $dry_run
         );
@@ -225,15 +225,40 @@ sub load_config {
 #   Potentially modifies program flow by calling 'die' if token fetch fails.
 ################################################################################
 sub fetch_bearer_token {
-    my ($token_fetch_url, $token_extraction_cmd, $workdir, $dry_run) = @_;
+    my ($config, $workdir, $dry_run) = @_;
 
     print "Fetching bearer token...\n";
 
-    my $method = "GET";
-    my $tmp_body_file = ''; # No body for GET
-    my $token_fetch_id = "token_fetch"; # used for logging
+#warn "DEBUG \$config in fetch_bearer_token:\n", Dumper($config);
+
+#my $method2 = $config->{token_fetch_method} // 'GET';
+#warn "DEBUG \$method is: $method2\n";
+
+    my $token_fetch_url          = $config->{token_fetch_url};
+    my $token_extraction_cmd     = $config->{token_extraction_command};
+
+    # read new optional fields (with defaults if missing)
+    my $method                   = $config->{token_fetch_method} // 'GET';
+    my $follow_redirects         = $config->{token_fetch_follow_redirects} ? 1 : 0;
+    my $headers                  = $config->{token_fetch_headers} // [];
+    my $form_data                = $config->{token_fetch_form_data} // [];
+    
+    warn "DBG: method { $method }";
+    warn "DBG: form data { $form_data }";
+
     my ($ok, $http_status, $response_body) =
-        do_curl($method, $token_fetch_url, $tmp_body_file, $workdir, $token_fetch_id, "", $dry_run, []);
+        do_curl(
+            $method,
+            $token_fetch_url,
+            "",                 # no dedicated body file for token fetch
+            $workdir,
+            "token_fetch",      # call_id for logging
+            "",                 # no bearer token yet
+            $dry_run,
+            $headers,
+            $form_data,
+            $follow_redirects
+        );
 
     if (!$ok && !$dry_run) {
         die "Failed to fetch bearer token (HTTP status: $http_status). Aborting.\n";
@@ -341,7 +366,7 @@ sub execute_rest_call {
     # Actually do the call
     # Pass the headers array along, so do_curl can handle them
     my ($ok, $http_status, $response_body) =
-        do_curl($method, $final_url, $x_req_file, $workdir, $call_id, $bearer_token, $dry_run, $headers);
+        do_curl($method, $final_url, $x_req_file, $workdir, $call_id, $bearer_token, $dry_run, $headers, undef, 0);
 
     # Write private version of the response if success
     my $x_resp_file = File::Spec->catfile($workdir, "x_${call_id}_response.json");
@@ -576,11 +601,25 @@ sub do_obfuscation {
 #   Potential side effect: logs command line, influences next steps if call fails.
 ################################################################################
 sub do_curl {
-    my ($method, $url, $body_file, $workdir, $call_id, $bearer_token, $dry_run, $headers) = @_;
+    my ($method, $url, $body_file, $workdir, $call_id, $bearer_token, $dry_run, $headers, $form_data, $follow_redirects) = @_;
+
+    my $location_arg = $follow_redirects ? '--location' : '';
 
     my $global_curl_log = File::Spec->catfile($workdir, 'all_curl_calls.txt');
 
     $ENV{"MY_BEARER_TOKEN"} = $bearer_token;
+
+    my $form_data_arg = '';
+    if ($form_data && ref($form_data) eq 'ARRAY' && scalar @$form_data > 0) {
+        foreach my $fd (@$form_data) {
+            my $name  = $fd->{name}  // '';
+            my $value = $fd->{value} // '';
+            # Optional: apply_replacements() if you haven't already done that upstream
+            # For now: no replacements in form data
+            $form_data_arg .= qq{ --data-urlencode "$name=$value"};
+        }
+    }
+
 
     # Basic curl arguments
     my $method_arg = "-X $method";
@@ -605,14 +644,16 @@ sub do_curl {
 
     # Build the final derived command line
     my $headers_str = join(" ", @extra_headers_args);
-    my $curl_cmd = qq{curl $silent_arg $method_arg $auth_arg $headers_str "$url" $data_arg -w "%{http_code}"};
+    #my $curl_cmd = qq{curl $silent_arg $method_arg $auth_arg $headers_str "$url" $data_arg -w "%{http_code}"};
+    my $curl_cmd = qq{curl $silent_arg $method_arg $auth_arg $headers_str $location_arg "$url" $form_data_arg $data_arg -w "%{http_code}"};
 
-# Log the derived curl command line with a comment line
-{
-    open my $GL, '>>', $global_curl_log or die "Cannot append to '$global_curl_log': $!\n";
-    print $GL "#$call_id\n", $curl_cmd, "\n\n";
-    close $GL;
-}
+
+    # Log the derived curl command line with a comment line
+    {
+        open my $GL, '>>', $global_curl_log or die "Cannot append to '$global_curl_log': $!\n";
+        print $GL "#$call_id\n", $curl_cmd, "\n\n";
+        close $GL;
+    }
 
 
     # If dry-run, skip actual call and pretend success

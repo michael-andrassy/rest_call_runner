@@ -10,9 +10,18 @@ def log_request(method, path):
         print(f"Received {method} on {path} without bearer token")
 
 # Return a JSON imitating a cookie with a token
-@app.route('/api/auth/get-token', methods=['GET'])
+@app.route('/api/auth/get-token', methods=['POST'])
 def get_token():
-    log_request("GET", "/api/auth/get-token")
+    log_request("POST", "/api/auth/get-token")
+    # Access form data (for application/x-www-form-urlencoded payloads)
+    form_data = request.form
+
+    # Print each form field to the console
+    print("Received form data:")
+    for key, value in form_data.items():
+        print(f"  {key}: {value}")
+
+    # Mocked token response, same as before
     token_data = {
         "name": "session",
         "value": "eyJhb_THIS_IS_A_MOCKED_JWT_TOKEN_CJ9.eyJ1c2VySWQiOiIxMjMiLCJuYW1lIjoiam9obiIsImlhdCI6MTUxNjIzOTAyMn0.GVS21Zrwf-8epIL7jUgnBBd5BxFxr0toB2BYQIxh6IU",
@@ -20,6 +29,7 @@ def get_token():
         "path": "/"
     }
     return jsonify(token_data)
+
 
 # GET returns client details including two account endpoints.
 # POST echoes back the received JSON body.
